@@ -9,7 +9,7 @@ namespace CoreDemo
     {
         static OpenTKWindow Instance;
 
-        [STAThread]
+        
         static void Main(string[] args)
         {
             Queue<string> argq = new Queue<string>(args);

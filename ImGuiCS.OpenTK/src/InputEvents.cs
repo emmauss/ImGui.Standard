@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Numerics;
+using OpenTK;
 using OpenTK.Graphics;
 using System.Collections.Generic;
 using System.Text;
@@ -74,8 +76,8 @@ namespace ImGuiOpenTK
 
     public class MouseMotionEvent : TKEvent
     {
-        public ImGuiNET.ImVec2 Position { get; private set; }
-        public MouseMotionEvent(ImGuiNET.ImVec2 newPosition)
+        public Point Position { get; private set; }
+        public MouseMotionEvent(Point newPosition)
         {
             EventType = Type.MouseMotion;
             Position = newPosition;

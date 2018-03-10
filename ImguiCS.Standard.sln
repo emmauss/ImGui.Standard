@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGuiCS.Demo", "ImGuiCS.Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDemo", "CoreDemo\CoreDemo.csproj", "{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGuiWidget", "ImGuiWidget\ImGuiWidget.csproj", "{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

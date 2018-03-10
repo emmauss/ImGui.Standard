@@ -54,9 +54,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="cimgui.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="src\Program.cs" />
     <Compile Include="src\YourGameWindow.cs" />
   </ItemGroup>

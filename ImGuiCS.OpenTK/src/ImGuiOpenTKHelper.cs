@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Numerics;
 using ImGuiNET;
 using TKEventType = ImGuiOpenTK.TKEvent.Type;
 using System.IO;
@@ -21,39 +22,38 @@ namespace ImGuiOpenTK{
             if (_Initialized)
                 return;
             _Initialized = true;
-
-            ImGuiIO io = ImGui.GetIO();
-            io.KeyMap[ImGuiKey.Tab] = (int)Key.Tab;
-            io.KeyMap[ImGuiKey.LeftArrow] = (int)Key.Left;
-            io.KeyMap[ImGuiKey.RightArrow] = (int)Key.Right;
-            io.KeyMap[ImGuiKey.UpArrow] = (int)Key.Up;
-            io.KeyMap[ImGuiKey.DownArrow] = (int)Key.Down;
-            io.KeyMap[ImGuiKey.PageUp] = (int)Key.PageUp;
-            io.KeyMap[ImGuiKey.PageDown] = (int)Key.Down;
-            io.KeyMap[ImGuiKey.Home] = (int)Key.Home;
-            io.KeyMap[ImGuiKey.End] = (int)Key.End;
-            io.KeyMap[ImGuiKey.Delete] = (int)Key.Delete;
-            io.KeyMap[ImGuiKey.Backspace] = (int)Key.BackSpace;
-            io.KeyMap[ImGuiKey.Enter] = (int)Key.Enter;
-            io.KeyMap[ImGuiKey.Escape] = (int)Key.Escape;
-            io.KeyMap[ImGuiKey.A] = (int)Key.A;
-            io.KeyMap[ImGuiKey.C] = (int)Key.C;
-            io.KeyMap[ImGuiKey.V] = (int)Key.V;
-            io.KeyMap[ImGuiKey.X] = (int)Key.X;
-            io.KeyMap[ImGuiKey.Y] = (int)Key.Y;
-            io.KeyMap[ImGuiKey.Z] = (int)Key.Z;
+            
+            IO io = ImGui.GetIO();
+            io.KeyMap[GuiKey.Tab] = (int)Key.Tab;
+            io.KeyMap[GuiKey.LeftArrow] = (int)Key.Left;
+            io.KeyMap[GuiKey.RightArrow] = (int)Key.Right;
+            io.KeyMap[GuiKey.UpArrow] = (int)Key.Up;
+            io.KeyMap[GuiKey.DownArrow] = (int)Key.Down;
+            io.KeyMap[GuiKey.PageUp] = (int)Key.PageUp;
+            io.KeyMap[GuiKey.PageDown] = (int)Key.Down;
+            io.KeyMap[GuiKey.Home] = (int)Key.Home;
+            io.KeyMap[GuiKey.End] = (int)Key.End;
+            io.KeyMap[GuiKey.Delete] = (int)Key.Delete;
+            io.KeyMap[GuiKey.Backspace] = (int)Key.BackSpace;
+            io.KeyMap[GuiKey.Enter] = (int)Key.Enter;
+            io.KeyMap[GuiKey.Escape] = (int)Key.Escape;
+            io.KeyMap[GuiKey.A] = (int)Key.A;
+            io.KeyMap[GuiKey.C] = (int)Key.C;
+            io.KeyMap[GuiKey.V] = (int)Key.V;
+            io.KeyMap[GuiKey.X] = (int)Key.X;
+            io.KeyMap[GuiKey.Y] = (int)Key.Y;
+            io.KeyMap[GuiKey.Z] = (int)Key.Z;
             /*
-            io.SetGetClipboardTextFn((userData) => );
+             *io.SetGetClipboardTextFn((userData) => );
             io.SetSetClipboardTextFn((userData, text) => SDL.SDL_SetClipboardText(text));*/
 
             // If no font added, add default font.
-            if (io.FontAtlas.Fonts.Size == 0)
-                io.FontAtlas.AddDefaultFont();
+            io.FontAtlas.AddDefaultFont();
         }
 
-        public static void NewFrame(ImVec2 size, ImVec2 scale, ref double g_Time) {
-            ImGuiIO io = ImGui.GetIO();
-            io.DisplaySize = size;
+        public static void NewFrame(Point size, System.Numerics.Vector2 scale, ref double g_Time) {
+            IO io = ImGui.GetIO();
+            io.DisplaySize = new System.Numerics.Vector2(size.X,size.Y);
             io.DisplayFramebufferScale = scale;
 
             double currentTime = Environment.TickCount / 1000D;
@@ -65,13 +65,13 @@ namespace ImGuiOpenTK{
             ImGui.NewFrame();
         }
 
-        public static void Render(ImVec2 size) {
+        public unsafe static void Render(Point size) {
             ImGui.Render();
-            if (ImGui.IO.RenderDrawListsFn == IntPtr.Zero)
-                RenderDrawData(ImGui.GetDrawData(), (int) Math.Round(size.X), (int) Math.Round(size.Y));
+            if (ImGuiNative.igGetIO()->RenderDrawListsFn == IntPtr.Zero)
+                RenderDrawData(ImGuiNative.igGetDrawData(), size.X, size.Y);
         }
         
-        public unsafe static void RenderDrawData(ImDrawData drawData, int displayW, int displayH) {
+        public unsafe static void RenderDrawData(DrawData* drawData, int displayW, int displayH) {
             // We are using the OpenGL fixed pipeline to make the example code simpler to read!
             // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers.
             int lastTexture;
@@ -99,7 +99,7 @@ namespace ImGuiOpenTK{
             GL.UseProgram(0);
 
             // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
-            ImGuiIO io = ImGui.GetIO();
+            IO io = ImGui.GetIO();
             ImGui.ScaleClipRects(drawData, io.DisplayFramebufferScale);
 
             // Setup orthographic projection matrix
@@ -121,35 +121,36 @@ namespace ImGuiOpenTK{
 
             // Render command lists
 
-            for (int n = 0; n < drawData.CmdListsCount; n++) {
-                ImDrawList cmdList = drawData[n];
-                ImVector<ImDrawVert> vtxBuffer = cmdList.VtxBuffer;
-                ImVector<ushort> idxBuffer = cmdList.IdxBuffer;
+            for (int n = 0; n < drawData->CmdListsCount; n++) {
+                DrawList cmddList = new DrawList(drawData->CmdLists[n]);
+                NativeDrawList* cmdList = drawData->CmdLists[n];
+                ImVector vtxBuffer = cmdList->VtxBuffer;
+                ImVector idxBuffer = cmdList->IdxBuffer;
 
-                GL.VertexPointer(2, VertexPointerType.Float, ImDrawVert.Size,
-                    new IntPtr((long) vtxBuffer.Data + ImDrawVert.PosOffset));
-                GL.TexCoordPointer(2,TexCoordPointerType.Float, ImDrawVert.Size, 
-                    new IntPtr((long) vtxBuffer.Data + ImDrawVert.UVOffset));
-                GL.ColorPointer(4, ColorPointerType.UnsignedByte, ImDrawVert.Size, 
-                    new IntPtr((long) vtxBuffer.Data + ImDrawVert.ColOffset));
+                GL.VertexPointer(2, VertexPointerType.Float, sizeof(DrawVert),
+                    new IntPtr((long) vtxBuffer.Data + DrawVert.PosOffset));
+                GL.TexCoordPointer(2,TexCoordPointerType.Float, sizeof(DrawVert), 
+                    new IntPtr((long) vtxBuffer.Data + DrawVert.UVOffset));
+                GL.ColorPointer(4, ColorPointerType.UnsignedByte, sizeof(DrawVert), 
+                    new IntPtr((long) vtxBuffer.Data + DrawVert.ColOffset));
 
                 long idxBufferOffset = 0;
-                for (int cmdi = 0; cmdi < cmdList.CmdBuffer.Size; cmdi++) {
-                    ImDrawCmd pcmd = cmdList.CmdBuffer[cmdi];
-                    if (pcmd.UserCallback != IntPtr.Zero) {
-                        pcmd.InvokeUserCallback(ref cmdList, ref pcmd);
-                    } else {
-                        GL.BindTexture(TextureTarget.Texture2D, (int) pcmd.TextureId);
+                for (int cmdi = 0; cmdi < cmdList->CmdBuffer.Size; cmdi++) {
+                    DrawCmd* pcmd = &(((DrawCmd*)cmdList->CmdBuffer.Data)[cmdi]);
+                   /* if (pcmd->UserCallback!= IntPtr.Zero) {
+                        pcmd->(ref cmdList, ref pcmd);
+                    } else {*/
+                        GL.BindTexture(TextureTarget.Texture2D, (int) pcmd->TextureId);
                         GL.Scissor(
-                            (int) pcmd.ClipRect.X,
-                            (int) (io.DisplaySize.Y - pcmd.ClipRect.W),
-                            (int) (pcmd.ClipRect.Z - pcmd.ClipRect.X),
-                            (int) (pcmd.ClipRect.W - pcmd.ClipRect.Y)
+                            (int) pcmd->ClipRect.X,
+                            (int) (io.DisplaySize.Y - pcmd->ClipRect.W),
+                            (int) (pcmd->ClipRect.Z - pcmd->ClipRect.X),
+                            (int) (pcmd->ClipRect.W - pcmd->ClipRect.Y)
                         );
-                        GL.DrawElements(PrimitiveType.Triangles, (int) pcmd.ElemCount,DrawElementsType.UnsignedByte, 
+                        GL.DrawElements(PrimitiveType.Triangles, (int) pcmd->ElemCount,DrawElementsType.UnsignedByte, 
                             new IntPtr((long) idxBuffer.Data + idxBufferOffset));
-                    }
-                    idxBufferOffset += pcmd.ElemCount * 2 /*sizeof(ushort)*/;
+                    
+                    idxBufferOffset += pcmd->ElemCount * 2 /*sizeof(ushort)*/;
                 }
             }
 
@@ -167,8 +168,10 @@ namespace ImGuiOpenTK{
             GL.Scissor(lastScissorBox.X, lastScissorBox.Y, lastScissorBox.Z, lastScissorBox.W);
         }
 
-        public static bool HandleEvent(TKEvent tKEvent) {
-            ImGuiIO io = ImGui.GetIO();
+       
+
+                public static bool HandleEvent(TKEvent tKEvent) {
+            IO io = ImGui.GetIO();
             switch (tKEvent.EventType)
             {
                 case TKEventType.Keyboard:
@@ -185,10 +188,6 @@ namespace ImGuiOpenTK{
                         case Key.AltLeft:
                         case Key.AltRight:
                             io.AltPressed = KeyboardEvent.IsKeyDown;
-                            break;
-                        case Key.WinLeft:
-                        case Key.WinRight:
-                            io.SuperPressed = KeyboardEvent.IsKeyDown;
                             break;
                         default:
                             io.KeysDown[(int)KeyboardEvent.Key] = KeyboardEvent.IsKeyDown;
@@ -216,13 +215,13 @@ namespace ImGuiOpenTK{
                     break;
                 case TKEventType.MouseMotion:
                     var MouseMotion = tKEvent as MouseMotionEvent;
-                    io.MousePosition = MouseMotion.Position;
+                    io.MousePosition = new System.Numerics.Vector2(MouseMotion.Position.X,MouseMotion.Position.Y);
                     break;
                 case TKEventType.TextInput:
                     var TextEvent = tKEvent as TextInputEvent;
                     unsafe
                     {
-                        ImGui.AddInputCharactersUTF8(TextEvent.Text);
+                        ImGuiNative.ImGuiIO_AddInputCharactersUTF8(TextEvent.Text);
                     }
                     break;
 

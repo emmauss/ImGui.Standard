@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using ImGuiNET;
+using ImGuiNETWidget;
 using ImGuiOpenTK;
 
 namespace CoreDemo
 {
     public class YourGameWindow : ImGuiOpenTKWindow {
 
-        private TextInputBuffer[] _TextInputBuffers;
+        private ImGuiNETWidget.TextInputBuffer[] _TextInputBuffers;
 
         private MemoryEditor _MemoryEditor = new MemoryEditor();
         private byte[] _MemoryEditorData;
@@ -37,12 +38,12 @@ namespace CoreDemo
         protected override void Create() {
             base.Create();
 
-            _TextInputBuffers = TextInputBuffer.CreateBuffers(2);
+            _TextInputBuffers = ImGuiNETWidget.TextInputBuffer.CreateBuffers(2);
         }
 
         // Dispose any possibly unmanaged resources (textures, buffers) here.
         protected override void Dispose(bool disposing) {
-            TextInputBuffer.DisposeBuffers(_TextInputBuffers);
+            ImGuiNETWidget.TextInputBuffer.DisposeBuffers(_TextInputBuffers);
 
             base.Dispose(disposing);
         }
@@ -53,41 +54,44 @@ namespace CoreDemo
         bool show_test_window = true;
         bool show_another_window = false;
         bool show_file_dialog;
-        ImVec3 clear_color = new ImVec3(114f/255f, 144f/255f, 154f/255f);
+        System.Numerics.Vector3 clear_color = new System.Numerics.Vector3(114f/255f, 144f/255f, 154f/255f);
         public unsafe override void ImGuiLayout() {
             // 1. Show a simple window
             // Tip: if we don't call ImGui.Begin()/ImGui.End() the widgets appears in a window automatically called "Debug"
             {
+                var io = ImGui.GetIO();
+                ImGui.BeginWindow("Debug");
                 ImGui.Text("Hello, world!");
                 ImGui.SliderFloat("float", ref f, 0.0f, 1.0f, null, 1f);
-                ImGui.ColorEdit3("clear color", ref clear_color, false);
+                ImGui.ColorEdit3("clear color", ref clear_color, ColorEditFlags.Default);
                 if (ImGui.Button("Test Window")) show_test_window = !show_test_window;
                 if (ImGui.Button("Another Window")) show_another_window = !show_another_window;
-                ImGui.Text(string.Format("Application average {0:F3} ms/frame ({1:F1} FPS)", 1000f / ImGui.GetIO().Framerate, ImGui.GetIO().Framerate));
-                ImGui.InputText("Text Input 1", _TextInputBuffers[0].Buffer, _TextInputBuffers[0].Length);
-                ImGui.InputText("Text Input 2", _TextInputBuffers[1].Buffer, _TextInputBuffers[1].Length);
+                ImGui.Text(string.Format("Application average {0:F3} ms/frame ({1:F1} FPS)",ImGui.GetIO().DeltaTime, 1f/ImGui.GetIO().DeltaTime));
+                //ImGui.InputText("Text Input 1", _TextInputBuffers[0], _TextInputBuffers[0].Length,InputTextFlags.Default,new TextEditCallback();
+                //ImGui.InputText("Text Input 2", _TextInputBuffers[1].Buffer, _TextInputBuffers[1].Length);
                 if (ImGui.Button("Open File")) show_file_dialog = !show_file_dialog;
+                ImGui.EndWindow();
             }
 
             // 2. Show another simple window, this time using an explicit Begin/End pair
             if (show_another_window) {
-                ImGui.SetNextWindowSize(new ImVec2(200, 100), ImGuiCond.FirstUseEver);
-                ImGui.Begin("Another Window", ref show_another_window);
+                ImGui.SetNextWindowSize(new System.Numerics.Vector2(200, 100), Condition.FirstUseEver);
+                ImGui.BeginChild("Another Window", show_another_window);
                 ImGui.Text("Hello");
-                ImGui.End();
+                ImGui.EndChild();
             }
 
             // 3. Show the ImGui test window. Most of the sample code is in ImGui.ShowTestWindow()
             if (show_test_window) {
-                ImGui.SetNextWindowPos(new ImVec2(650, 20), ImGuiCond.FirstUseEver);
-                ImGui.ShowTestWindow(ref show_test_window);
+                ImGui.SetNextWindowPos(new System.Numerics.Vector2(650, 20), Condition.FirstUseEver,new System.Numerics.Vector2(0,0));
+                ImGuiNative.igShowDemoWindow(ref show_test_window);
             }
 
             // 4. Show the memory editor and file dialog, just as an example.
             _MemoryEditor.Draw("Memory editor", _MemoryEditorData, _MemoryEditorData.Length);
             if (show_file_dialog) {
                 string start = _Dialog.LastDirectory;
-                _Dialog.ChooseFileDialog(true, _Dialog.LastDirectory, null, "Choose File", new ImVec2(500, 500), new ImVec2(50, 50), 1f);
+                _Dialog.ChooseFileDialog(true, _Dialog.LastDirectory, null, "Choose File", new System.Numerics.Vector2(500, 500), new System.Numerics.Vector2(50, 50), 1f);
                 if (!string.IsNullOrEmpty(_Dialog.ChosenPath))
                     _TextInputBuffers[0].StringValue = _Dialog.ChosenPath;
             }

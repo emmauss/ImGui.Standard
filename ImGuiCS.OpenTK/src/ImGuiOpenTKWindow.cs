@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Numerics;
 using ImGuiNET;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -20,9 +21,9 @@ namespace ImGuiOpenTK
         protected float g_MouseWheel = 0.0f;
         protected int g_FontTexture = 0;
 
-        public ImVec2 Position {
+        public System.Numerics.Vector2 Position {
             get {
-                return new ImVec2(X, Y);
+                return new System.Numerics.Vector2(X, Y);
             }
             set {
                 X = (int)Math.Round(value.X);
@@ -30,15 +31,15 @@ namespace ImGuiOpenTK
             }
         }
 
-        public new ImVec2 Size {
+        public new Point Size {
             get
             {
-                return new ImVec2(Width, Height);
+                return new Point(Width, Height);
             }
             set
             {
-                Width = (int)Math.Round(value.X);
-                Height = (int)Math.Round(value.Y);
+                Width = value.X;
+                Height = value.Y;
             }
         }
 
@@ -74,21 +75,18 @@ namespace ImGuiOpenTK
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            ImGuiRender();
             base.OnUpdateFrame(e);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            OpenTK.Graphics.OpenGL.GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.ColorBufferBit);
-
-            ImGuiRender();
-
-            Swap();
+            OpenTK.Graphics.OpenGL.GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.ColorBufferBit);            
         }
 
         public virtual void ImGuiRender() {
-            if(Mouse?.GetState().LeftButton == OpenTK.Input.ButtonState.Pressed)
-            ImGuiOpenTKHelper.NewFrame(Size, ImVec2.One, ref g_Time);
+            //if(Mouse?.GetState().LeftButton == OpenTK.Input.ButtonState.Pressed)
+            ImGuiOpenTKHelper.NewFrame(Size, System.Numerics.Vector2.One, ref g_Time);
 
             ImGuiLayout();
 
@@ -102,11 +100,11 @@ namespace ImGuiOpenTK
                 ImGui.Text($"Override {nameof(ImGuiLayout)} in {GetType().FullName}!");
         }
 
-        protected virtual void Create() {
-            ImGuiIO io = ImGui.GetIO();
+        protected  unsafe virtual void Create() {
+            IO io = ImGui.GetIO();
 
             // Build texture atlas
-            ImFontTextureData texData = io.FontAtlas.GetTexDataAsAlpha8();
+            FontTextureData texData = io.FontAtlas.GetTexDataAsAlpha8();
 
             int lastTexture;
             GL.GetInteger(GetPName.TextureBinding2D ,out lastTexture);
@@ -126,7 +124,7 @@ namespace ImGuiOpenTK
                 0,
                 PixelFormat.Alpha,
                 PixelType.UnsignedByte,
-                texData.Pixels
+                new IntPtr(texData.Pixels)
             );
 
             // Store the texture identifier in the ImFontAtlas substructure.
@@ -136,7 +134,7 @@ namespace ImGuiOpenTK
         }
 
         protected override void Dispose(bool disposing) {
-            ImGuiIO io = ImGui.GetIO();
+            /*ImGuiIO io = ImGui.GetIO();
 
             if (disposing) {
                 // Dispose managed state (managed objects).
@@ -151,7 +149,7 @@ namespace ImGuiOpenTK
                     io.FontAtlas.TexID = IntPtr.Zero;
                 g_FontTexture = 0;
             }
-
+            */
             base.Dispose(disposing);
         }
 
