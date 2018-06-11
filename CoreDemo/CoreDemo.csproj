@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ImGuiCS.OpenTK\ImGuiCS.OpenTK.csproj" />
-    <ProjectReference Include="..\ImGuiWidget\ImGuiWidget.csproj" />
+    <ProjectReference Include="..\ImGuiNet.OpenTK\ImGuiNet.OpenTK.csproj" />
   </ItemGroup>
 
 </Project>

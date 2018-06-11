@@ -22,7 +22,7 @@ namespace CoreDemo
 
             /*ImGuiOpenTKCSWindow*/
             Instance = new YourGameWindow();
-            Instance.Run();
+            Instance.Start();
             Instance.Dispose();
         }
     }

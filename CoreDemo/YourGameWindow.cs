@@ -10,7 +10,7 @@ namespace CoreDemo
 {
     public class YourGameWindow : ImGuiOpenTKWindow {
 
-        private ImGuiNETWidget.TextInputBuffer[] _TextInputBuffers;
+        //private ImGuiNETWidget.TextInputBuffer[] _TextInputBuffers;
 
         private MemoryEditor _MemoryEditor = new MemoryEditor();
         private byte[] _MemoryEditorData;
@@ -38,12 +38,12 @@ namespace CoreDemo
         protected override void Create() {
             base.Create();
 
-            _TextInputBuffers = ImGuiNETWidget.TextInputBuffer.CreateBuffers(2);
+          //  _TextInputBuffers = ImGuiNETWidget.TextInputBuffer.CreateBuffers(2);
         }
 
         // Dispose any possibly unmanaged resources (textures, buffers) here.
         protected override void Dispose(bool disposing) {
-            ImGuiNETWidget.TextInputBuffer.DisposeBuffers(_TextInputBuffers);
+           // ImGuiNETWidget.TextInputBuffer.DisposeBuffers(_TextInputBuffers);
 
             base.Dispose(disposing);
         }
@@ -92,8 +92,8 @@ namespace CoreDemo
             if (show_file_dialog) {
                 string start = _Dialog.LastDirectory;
                 _Dialog.ChooseFileDialog(true, _Dialog.LastDirectory, null, "Choose File", new System.Numerics.Vector2(500, 500), new System.Numerics.Vector2(50, 50), 1f);
-                if (!string.IsNullOrEmpty(_Dialog.ChosenPath))
-                    _TextInputBuffers[0].StringValue = _Dialog.ChosenPath;
+               /* if (!string.IsNullOrEmpty(_Dialog.ChosenPath))
+                    _TextInputBuffers[0].StringValue = _Dialog.ChosenPath;*/
             }
         }
 

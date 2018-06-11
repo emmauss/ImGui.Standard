@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImguiCS.Standard", "ImguiCS.Standard\ImguiCS.Standard.csproj", "{82F6199E-6337-4B6C-B68F-11C72B202AFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImguiCS.Standard", "ImguiCS.Standard\ImguiCS.Standard.csproj", "{82F6199E-6337-4B6C-B68F-11C72B202AFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGuiCS.OpenTK", "ImGuiCS.OpenTK\ImGuiCS.OpenTK.csproj", "{0ECC14C4-BCC4-412B-BB8A-23BEE235C848}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreDemo", "CoreDemo\CoreDemo.csproj", "{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImGuiNet.OpenTK", "ImGuiNet.OpenTK\ImGuiNet.OpenTK.csproj", "{5025C7D3-F1F1-462F-A049-AFB5AD8BF83E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGuiCS.Demo", "ImGuiCS.Demo\ImGuiCS.Demo.csproj", "{6F28213D-5564-4908-A30D-3F1AA2E60306}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDemo", "CoreDemo\CoreDemo.csproj", "{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImGuiWidget", "ImGuiWidget\ImGuiWidget.csproj", "{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,22 +21,18 @@ Global
 		{82F6199E-6337-4B6C-B68F-11C72B202AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82F6199E-6337-4B6C-B68F-11C72B202AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82F6199E-6337-4B6C-B68F-11C72B202AFA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0ECC14C4-BCC4-412B-BB8A-23BEE235C848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0ECC14C4-BCC4-412B-BB8A-23BEE235C848}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0ECC14C4-BCC4-412B-BB8A-23BEE235C848}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0ECC14C4-BCC4-412B-BB8A-23BEE235C848}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9489D8D6-8446-4B5D-9C44-7201A75D4A4C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0105A756-F6CC-4F9E-B9FF-9CE8E9337D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5025C7D3-F1F1-462F-A049-AFB5AD8BF83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5025C7D3-F1F1-462F-A049-AFB5AD8BF83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5025C7D3-F1F1-462F-A049-AFB5AD8BF83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5025C7D3-F1F1-462F-A049-AFB5AD8BF83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F28213D-5564-4908-A30D-3F1AA2E60306}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
